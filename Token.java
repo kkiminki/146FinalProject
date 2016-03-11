@@ -117,17 +117,14 @@ public class Token
     public static final int BOMB = 11;
     public static final int LAKE = 12;
     public static final int tokenTypes[] = {
-        0, 1, 2, 3, 3, 4, 4, 4, 5, 5, 
-        5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 
-        8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 
-        9, 9, 9, 10, 11, 11, 11, 11, 11, 11
+        0, 1, 5, 5, 8, 8, 10, 11
     };
     public static final String tokenName[] = {
-        "Flag", "Marshal", "General", "Colonel", "Major", "Captain", "Lieutenant", "Sergeant", "Miner", "Scout", 
-        "Spy", "Bomb", ""
+        "Flag", "Marshal", "General", "Colonel", "Major", "Captain", "Lieutenant", "Sergeant", "Miner", "Scout",
+             "Spy", "Bomb", ""
     };
 
-    static 
+    static
     {
         pictures = new Image[13];
         tokenColor = (new Color[] {
@@ -138,14 +135,8 @@ public class Token
             Stratego.traceIn("Token", "static initializer block");
         pictures[0] = Toolkit.getDefaultToolkit().getImage("Flag.gif");
         pictures[1] = Toolkit.getDefaultToolkit().getImage("Marshal.gif");
-        pictures[2] = Toolkit.getDefaultToolkit().getImage("General.gif");
-        pictures[3] = Toolkit.getDefaultToolkit().getImage("Colonel.gif");
-        pictures[4] = Toolkit.getDefaultToolkit().getImage("Major.gif");
         pictures[5] = Toolkit.getDefaultToolkit().getImage("Captain.gif");
-        pictures[6] = Toolkit.getDefaultToolkit().getImage("Lieutenant.gif");
-        pictures[7] = Toolkit.getDefaultToolkit().getImage("Sergeant.gif");
         pictures[8] = Toolkit.getDefaultToolkit().getImage("Miner.gif");
-        pictures[9] = Toolkit.getDefaultToolkit().getImage("Scout.gif");
         pictures[10] = Toolkit.getDefaultToolkit().getImage("Spy.gif");
         pictures[11] = Toolkit.getDefaultToolkit().getImage("Bomb.gif");
         pictures[12] = null;

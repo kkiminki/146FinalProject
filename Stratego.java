@@ -19,13 +19,12 @@ public class Stratego
 
     public Stratego(String as[])
     {
-        opponentIPAddress = "";
+        mcts_bot = new TreeNode();
         System.out.println("Stratego: version 1.0");
         System.out.println("Programmed by Brad Wall and Don Collier");
         setGameSize();
         if(as.length == 0)
         {
-            getLocalIP();
             String as1[] = {
                 "Play", "Demo", "Trace", "Debug", "Quit", "Help"
             };
@@ -33,7 +32,7 @@ public class Stratego
             switch(i)
             {
             case 0: // '\0'
-                networked = true;
+                bot = true;
                 verbose = false;
                 break;
 
@@ -43,71 +42,42 @@ public class Stratego
                 // fall through
 
             case 1: // '\001'
-                networked = false;
+                bot = false;
                 verbose = false;
                 break;
 
             case 2: // '\002'
-                networked = false;
+                bot = false;
                 verbose = true;
                 break;
 
             case 3: // '\003'
-                networked = true;
+                bot = true;
                 verbose = true;
                 break;
 
             case 5: // '\005'
                 helping = true;
-                networked = false;
+                bot = false;
                 verbose = false;
                 break;
             }
-            if(!networked && !verbose && helping)
+            if(!bot && !verbose && helping)
             {
                 //help = new HelpFrame();
                 //help.helpInfo();
                 System.out.println("help");
             }
-            if(networked && !helping)
-                do
-                {
-                    opponentIPAddress = JOptionPane.showInputDialog(null, "Your IP address is: " + localIPAddress + "\nEnter opponent IP address below", "Stratego IP Addresses", 1);
-                    if(opponentIPAddress == null)
-                        System.exit(0);
-                } while(opponentIPAddress.equals(""));
-        } else
-        {
-            opponentIPAddress = as[0];
-        }
         if(verbose && !helping)
             trace = new TraceFrame();
-        if(networked && !helping)
+        if(bot && !helping)
         {
-            ConnectionManager connectionmanager = new ConnectionManager(opponentIPAddress);
-            try
-            {
-                connectionmanager.join();
-            }
-            catch(InterruptedException interruptedexception) { }
-            writeSocket = connectionmanager.getWriteSocket();
-            readSocket = connectionmanager.getReadSocket();
-            FlipCoin flipcoin = new FlipCoin(readSocket, writeSocket);
-            try
-            {
-                flipcoin.join();
-            }
-            catch(InterruptedException interruptedexception1) { }
-            byte byte0;
-            if(flipcoin.imFirst())
-                byte0 = 1;
-            else
-                byte0 = 2;
-            Game game = new Game(byte0, new MoveWriter(writeSocket));
-            new MoveReader(game, readSocket);
+            byte byte0 = 1;
+            Game game = new Game(byte0, mcts_bot);
         }
-        if(!networked && !verbose && !helping)
+        if(!bot && !verbose && !helping)
             new Game(1, null);
+        }
     }
 
     public void setGameSize()
@@ -115,24 +85,6 @@ public class Stratego
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         width = dimension.width / 18;
         height = dimension.height / 12;
-    }
-
-    private void getLocalIP()
-    {
-        try
-        {
-            localIPAddress = InetAddress.getLocalHost().getHostAddress();
-        }
-        catch(SecurityException securityexception)
-        {
-            System.err.println("SECURITY ERROR: " + securityexception);
-            System.exit(1);
-        }
-        catch(UnknownHostException unknownhostexception)
-        {
-            System.err.println("HOST ERROR: " + unknownhostexception);
-            System.exit(1);
-        }
     }
 
     public static int getWidth()
@@ -143,11 +95,6 @@ public class Stratego
     public static int getHeight()
     {
         return height;
-    }
-
-    public static boolean isNetworked()
-    {
-        return networked;
     }
 
     public static boolean isVerbose()
@@ -199,15 +146,12 @@ public class Stratego
     public static final int DEBUG = 3;
     public static final int HELP = 5;
     public static final int QUIT = 4;
-    private static boolean networked = true;
+    public static TreeNode mcts_bot;
     private static boolean verbose = false;
     private static boolean helping = false;
+    private static boolean bot = false;
     private static int width;
     private static int height;
-    private String localIPAddress;
-    private String opponentIPAddress;
-    private Socket readSocket;
-    private Socket writeSocket;
     private static TraceFrame trace = null;
     private static String indent = "";
     //private static HelpFrame help = null;

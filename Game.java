@@ -29,8 +29,7 @@ public class Game extends JFrame
         playerNumber = i;
         sendMove = movewriter;
         opponentNumber = i != 1 ? 1 : 2;
-        battleField = new Board(10, 10, i, this);
-        tray = new Board(10, 4, i, this);
+        battleField = new Board(6, 4, i, this);
         tray.fillWithTokens();
         if(Stratego.isNetworked())
         {
